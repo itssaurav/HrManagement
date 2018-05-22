@@ -17,6 +17,7 @@ import {
 import {Bars} from 'react-native-loader'
 import {Actions} from 'react-native-router-flux'
 import firebase from '../../src/firebaseConfig'
+import { Actions } from 'react-native-router-flux';
 
 class AdminProject extends Component {
     constructor(props) {
@@ -27,7 +28,7 @@ class AdminProject extends Component {
             password:'',
             projectList:''
         }
-
+        // this.userSignup = this.userSignup.bind(this)
     }
     componentDidMount()
     {
