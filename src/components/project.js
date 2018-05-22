@@ -15,6 +15,7 @@ import {
 
 
 import firebase from '../../src/firebaseConfig'
+import { Actions } from 'react-native-router-flux';
 
 class AdminProject extends Component {
     constructor(props) {
@@ -24,9 +25,9 @@ class AdminProject extends Component {
             username:'',
             password:'',
         }
-
+        // this.userSignup = this.userSignup.bind(this)
     }
-
+    
     addUser()
     {
         let addData = {
