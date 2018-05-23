@@ -17,7 +17,6 @@ import {
 import {Bars} from 'react-native-loader'
 import {Actions} from 'react-native-router-flux'
 import firebase from '../../src/firebaseConfig'
-import { Actions } from 'react-native-router-flux';
 
 class AdminProject extends Component {
     constructor(props) {
@@ -43,9 +42,9 @@ class AdminProject extends Component {
     }
 
     render() {
-        console.ignoredYellowBox = [
-            'Setting a timer'
-        ]
+        // console.ignoredYellowBox = [
+        //     'Setting a timer'
+        // ]
         return (
             <View style={{flex:1,padding:10}}>
                 <View style={{flex:1,backgroundColor:'#fff',padding:5,position:'relative'}}>
