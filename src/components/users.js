@@ -31,7 +31,7 @@ class AdminUsers extends Component {
     {
         let addData = {
             'userId':3,
-            'name':'saurav',
+           'name':'saurav',
             'type':'user'
         }
         firebase.database().ref('users/' + addData.userId).set(addData);

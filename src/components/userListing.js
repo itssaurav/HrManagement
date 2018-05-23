@@ -19,6 +19,7 @@ import {Actions} from 'react-native-router-flux'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import firebase from '../../src/firebaseConfig'
 let selectedIds = [];
+let selectedUI  = [];
 class UserListing extends Component {
     constructor(props) {
         super(props);
@@ -27,7 +28,8 @@ class UserListing extends Component {
             username:'',
             password:'',
             userList:'',
-            selectedUser:[]
+            selectedUser:[],
+            projectUser:[]
         }
      this.selectedData=this.selectedData.bind(this);
     }
@@ -41,31 +43,100 @@ class UserListing extends Component {
             console.log('result',resultArray);
             this.setState({userList:resultArray});
         });
-    }
-    selectedData(selectedUser)
-    {
+        firebase.database().ref('project').child(this.props.p_id).on('value',(projectData)=>{
+            this.setState({projectUser:projectData.val()});
+        });
 
-        if(selectedIds.indexOf(selectedUser)>=0)
-        {
-            selectedIds.splice(selectedIds.indexOf(selectedUser),1);
+
+    }
+    selectedData(selectedUser) {
+        console.log('this.state.projectUser.p_member_left', this.state.projectUser.p_member_left);
+
+        if (this.state.userList.hasOwnProperty('p_id')) {
+            console.log('centerData', this.state.userList.p_id);
+        }
+        if (selectedIds.indexOf(selectedUser) >= 0) {
+            selectedIds.splice(selectedIds.indexOf(selectedUser), 1);
+            firebase.database().ref('userlist/' + selectedUser).update({
+                'p_id': '',
+                'p_name':''
+            }, function (error) {
+                if (error) {
+                    // The write failed...
+                } else {
+                    // Data saved successfully!
+                }
+            });
+            firebase.database().ref('project/' + this.props.p_id).update({
+                'p_member_included': this.state.projectUser.p_member_included - 1,
+                'p_member_left': this.state.projectUser.p_member_left + 1,
+
+            }, function (error) {
+                if (error) {
+                    // The write failed...
+                } else {
+                    // Data saved successfully!
+                }
+            });
+
+
         }
         else {
-            selectedIds.push(selectedUser);
+            if (this.state.projectUser.p_member_left > 0) {
+                selectedIds.push(selectedUser);
+                firebase.database().ref('userlist/' + selectedUser).update({
+                    'p_id': this.props.p_id,
+                    'p_name':this.props.p_name
+
+                }, function (error) {
+                    if (error) {
+                        console.log('error', error);
+                    } else {
+                        console.log('successful');
+                    }
+                });
+                firebase.database().ref('project/' + this.props.p_id).update({
+                    'u_id': selectedIds,
+                    'p_member_included': this.state.projectUser.p_member_included + 1,
+                    'p_member_left': this.state.projectUser.p_member_left - 1,
+                }, function (error) {
+                    if (error) {
+                        // The write failed...
+                    } else {
+                        // Data saved successfully!
+                    }
+                });
+            }
+            else {
+                alert('Project is already full');
+
+            }
         }
-        this.setState({
-            selectedUser:selectedIds
-        })
+          firebase.database().ref('project/' + this.props.p_id).update({
+                'u_id': selectedIds
+            });
+
+            this.setState({
+                selectedUser: selectedIds
+            })
+
     }
+
+
+
+
     render() {
         console.ignoredYellowBox = [
             'Setting a timer'
         ]
-        console.log('selectedUser',this.state.selectedUser);
+        console.log('selectedUser',this.state.projectUser);
+        console.log('condition', this.state.projectUser.length);
         return (
             <View style={{flex:1,padding:10}}>
                 <View style={{flex:1,backgroundColor:'#fff',padding:5,position:'relative'}}>
 
                     <View style={{flex:1}}>
+
                         {this.state.userList!==''?<FlatList
                             data={this.state.userList}
                             keyExtractor={(item, index) => index.toString()}
@@ -86,19 +157,16 @@ class UserListing extends Component {
                                             <View style={{flex:1}}>
                                                 <Text> Designation : {item.Designation}</Text>
                                             </View>
+                                            <View style={{flex:1}}>
+                                                <Text> AssignedTo : {item.p_id!==''? item.p_name:'None'}</Text>
+                                            </View>
 
                                         </View>
 
                                     </View>
-                                    {this.state.selectedUser.length?this.state.selectedUser.map((itemData)=>{
-                                        console.log(itemData);
-                                        return (
-                                        <View style={{flex:1,position:'absolute',right:'2%',top:'3%'}}>
-                                            {itemData===item.keydata?<FontAwesome name="check-circle" size={20} color='green'/>:null}
-                                        </View>)
-                                    }):null
-                                    }
-
+                                    {item.p_id===this.props.p_id?<View style={{flex:1,position:'absolute',right:'2%',top:'3%'}}>
+                                        <FontAwesome name="check-circle" size={20} color='green'/>
+                                    </View>:null}
                                </TouchableOpacity>
                             }
                         />:<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
