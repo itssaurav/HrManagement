@@ -62,11 +62,11 @@ class AddProject extends Component {
         let data = firebase.database().ref().child('project').push();
         data.set({
             'p_name':this.state.name,
-            'p_total_member':this.state.members,
+            'p_total_member':parseInt(this.state.members,10),
             'p_startDate':new Date(this.state.startdate).getTime(),
             'p_endDate':new Date(this.state.enddate).getTime(),
             'p_id':data.key,
-            'p_member_left':this.state.members,
+            'p_member_left':parseInt(this.state.members, 10),
             'p_member_included':0
         });
         this.setState({

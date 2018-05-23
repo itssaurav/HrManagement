@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import {Router,Scene} from 'react-native-router-flux'
+import {Router,Scene,Modal} from 'react-native-router-flux'
 import Home from './src/components/home'
 import {Provider} from "react-redux";
 import Store from './src/redux/store';
@@ -24,7 +24,9 @@ import userleave from './src/components/userleaveform'
 export default class App extends Component<Props> {
    render() {
         const scenes = ()=>{return (<Router>
+
                <Scene key="root">
+
                  <Scene key="home"  tabs={true} default="tab1" lazy="true" tabBarPosition="top">
                       <Scene key="userlogin" component={UserLogin} tabBarStyle={{flex:1,justifyContent:'center',alignItems:'center'}} title="User" hideNavBar/>
                       <Scene key="Loginadmin" component={Home} tabBarStyle={{flex:1,justifyContent:'center',alignItems:'center'}} title="Admin" hideNavBar/>
@@ -41,7 +43,9 @@ export default class App extends Component<Props> {
                    <Scene key="addproject" component={AddProject} title="Add Project"/>
                    <Scene key="userListing" component={UserListing} modal title="User Listing"/>
                    <Scene key="userSignup"  component={userSignup} title="usersignup"/>
+
               </Scene>
+
 
         </Router>)}
 

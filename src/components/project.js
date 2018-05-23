@@ -12,7 +12,8 @@ import {
     BackHandler,
     ToastAndroid,
     FlatList,
-    Image
+    Image,
+    YellowBox
 } from 'react-native';
 import {Bars} from 'react-native-loader'
 import {Actions} from 'react-native-router-flux'
@@ -20,6 +21,11 @@ import firebase from '../../src/firebaseConfig'
 
 class AdminProject extends Component {
     constructor(props) {
+        YellowBox.ignoreWarnings(
+
+            ['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'
+
+            ]);
         super(props);
         this.state = {
             seconds: 0,
@@ -29,15 +35,14 @@ class AdminProject extends Component {
         }
         // this.userSignup = this.userSignup.bind(this)
     }
-    componentDidMount()
+    componentWillMount()
     {
         let resultArray = [];
         firebase.database().ref('project').on('value',(projectData)=>{
             resultArray= Object.keys(projectData.val()).map(function(key) {
                    return projectData.val()[key]
                 });
-            console.log('result',resultArray);
-           this.setState({projectList:resultArray});
+         this.setState({projectList:resultArray});
         });
     }
 
@@ -83,7 +88,7 @@ class AdminProject extends Component {
                                     </View>
 
                                     </View>
-                                    <TouchableOpacity style={{flex:1,justifyContent:'center',alignItems:'center',padding:10,backgroundColor:'#6164c1',marginTop:10}} onPress={()=>{Actions.userListing()}}>
+                                    <TouchableOpacity style={{flex:1,justifyContent:'center',alignItems:'center',padding:10,backgroundColor:'#6164c1',marginTop:10}} onPress={()=>{Actions.userListing({'p_id':item.p_id,'p_name':item.p_name})}}>
                                         <Text style={{color:'#fff'}}>Add Members</Text>
                                     </TouchableOpacity>
                                 </View>

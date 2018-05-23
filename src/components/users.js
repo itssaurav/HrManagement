@@ -34,6 +34,7 @@ class AdminUsers extends Component {
         }
 
     }
+
     componentWillMount(){
           listeddata = this.state.listuser
           let resultarray = []
@@ -62,6 +63,7 @@ class AdminUsers extends Component {
         //     })
         // })
         // console.log("notesdata", listeddata)
+
     }
     // addUser()
     // {
