@@ -18,7 +18,7 @@ import UserListing from './src/components/userListing'
 import UserLogin from './src/components/userlogin'
 import UserDashboard from './src/components/userdashboard'
 import userleave from './src/components/userleaveform'
-import LeavePanel from './src/components/leave Panel'
+import LeavePanel from './src/components/leavePanel'
 import Splash from './src/components/splash'
 
 export default class App extends Component<Props> {
