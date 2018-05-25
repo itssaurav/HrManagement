@@ -9,7 +9,6 @@ import {
     Text,
     TouchableOpacity,
     View,
-
     BackHandler,
     ToastAndroid
 } from 'react-native';

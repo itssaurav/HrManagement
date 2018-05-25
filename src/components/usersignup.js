@@ -37,8 +37,11 @@ class userSignup extends Component {
             email: this.state.email,
             projectname: this.state.project,
             Designation: this.state.designation,
+            p_id:'',
+            p_name:'',
             keydata: dataids
           });
+        Actions.pop();
     }
     registeruser(){
         console.log(this.state.email);

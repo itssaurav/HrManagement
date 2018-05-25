@@ -32,9 +32,7 @@ class AdminHome extends Component {
 
     }
     componentWillMount() {
-        AsyncStorage.getItem('user').then((value)=>{
-            console.log('user',value);
-        })
+
         BackHandler.addEventListener('hardwareBackPress', this.bachButtonhandler.bind(this));
     }
 
@@ -63,7 +61,6 @@ class AdminHome extends Component {
                 <View style={{flex:1,backgroundColor:'#fff',padding:20}}>
                    <Text>Admin DashBoard</Text>
                 </View>
-
             </View>
         );
     }

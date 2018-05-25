@@ -11,73 +11,41 @@ import {
     View,
     BackHandler,
     ToastAndroid,
-    FlatList
+    FlatList,
+    Image
 } from 'react-native';
-import {List, ListItem} from 'react-native-elements'
+
+import {Bars} from 'react-native-loader'
 
 
 import firebase from '../firebaseConfig'
 import { Actions } from 'react-native-router-flux'
 let listeddata
-let snapdata
-let dataarray 
+
 class AdminUsers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // seconds: 0,
-            // username:'',
-            // password:'',
-            // listuser: [
-            listeduser : ''
-            // ]
+             listeduser : ''
+
         }
-
-    }
-
-    componentWillMount(){
+}
+   componentWillMount(){
           listeddata = this.state.listuser
-          let resultarray = []
-      let listcount =  firebase.database().ref().child('userlist')
-      listcount.once('value', snap=>{
-            // console.log("snapdata",snap.val())
-             snapdata = snap.val()
-            console.log("snddddata", snapdata)
-            resultarray =   Object.keys(snapdata).map(function(a){
-                return snapdata[a]
-                })
-                console.log("dataarray", resultarray)
-                this.setState({
-                    listeduser: resultarray
-                })
-            // listeddata.push(snap.val())
-            // console.log("notesdata", listeddata)
-        //    let dataobject =  Object.keys(listeddata).map(function(key){
-        //        return [Number(key), obj[key]]
-        //    });
-        //    console.log("objectsdata", dataobject)
-        })
-        // firebase.database().on('child_added', snap=>{
-        //     listeddata.push({
-        //         listeddata: snap.val().userlist
-        //     })
-        // })
-        // console.log("notesdata", listeddata)
+          let resultarray = [];
+          let listcount =  firebase.database().ref().child('userlist');
+          listcount.on('value', snap=>{
+          resultarray =   Object.keys(snap.val()).map((key)=>{
+                    return snap.val()[key]
+                    })
+          this.setState({
+              listeduser: resultarray
+          })
+      })
+   }
 
-    }
-    // addUser()
-    // {
-    //     let addData = {
-    //         'userId':3,
-    //         'name':'saurav',
-    //         'type':'user'
-    //     }
-    //     firebase.database().ref('users/' + addData.userId).set(addData);
-
-    // }
     render() {
-        // console.log("listeduser",this.state.listeduser)
-        return (
+      return (
             <View style={{flex:1,padding:10}}>
               <TouchableOpacity 
             onPress = {()=>Actions.userSignup()}
@@ -88,20 +56,31 @@ class AdminUsers extends Component {
                   alignItems: 'center',
                   backgroundColor: '#4971ff'
             }}><Text style = {{color: '#fff',}}>Add user</Text></TouchableOpacity>
-                <View style={{flex:1,backgroundColor:'#fff',padding:20}}>
-                    {/* <Text>Admin User</Text> */}
-
-                        <FlatList 
+                <View style={{flex:1,backgroundColor:'#fff',padding:10}}>
+                   {this.state.listeduser?<FlatList
+                        keyExtractor={(item, index) => index.toString()}
                         data= {this.state.listeduser}
                         renderItem={({item})=>(
-                        <View>
-                         <Text>{item.username}</Text>
-                         <Text>{item.email}</Text>
-                         <Text>{item.projectname}</Text>
-                         <Text>{item.Designation}</Text>
-                         </View>
+
+                        <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:4,marginBottom:10,padding:5,elevation:1}}>
+                           <View style={{flexDirection:'row',flex:1}}>
+                                <View style={{flex:1}}>
+                                    <Image source={require('../assets/project.jpg')} style={{width:70,height:70}}/>
+                                </View>
+                                <View style={{flex:2}}>
+                                   <Text>Name : {item.username}</Text>
+                                   <Text>Designation : {item.Designation}</Text>
+                                   <Text>Email : {item.email}</Text>
+                                   <Text>Currently on : {item.p_id?item.p_name:'none'}</Text>
+                                </View>
+                            </View>
+                            {item.hasOwnProperty('leave')?<View style={{flex:1,justifyContent:'center',alignItems:'flex-end',alignSelf:'stretch',marginTop:10}}>
+                                <TouchableOpacity onPress={()=>Actions.leavePanel({leaveData:item.leave,title:'Leave Applied by '+item.username,keyItem:item.keydata})} style={{backgroundColor:'#4971ff',padding:4,borderRadius:4}}><Text style={{color:'#fff'}}>Applied Leaves</Text></TouchableOpacity>
+                            </View>:null}
+                        </View>
                         )}
-                        />
+                        />:<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                        <Bars size={10} color="#FDAAFF" /></View>}
                    
                 </View>
 

@@ -46,59 +46,17 @@ class UserListing extends Component {
         firebase.database().ref('project').child(this.props.p_id).on('value',(projectData)=>{
             this.setState({projectUser:projectData.val()});
         });
-
-
     }
-    selectedData(selectedUser) {
-        console.log('this.state.projectUser.p_member_left', this.state.projectUser.p_member_left);
-
+    selectedData(selectedUser,item) {
         if (this.state.userList.hasOwnProperty('p_id')) {
-            console.log('centerData', this.state.userList.p_id);
+
         }
         if (selectedIds.indexOf(selectedUser) >= 0) {
-            selectedIds.splice(selectedIds.indexOf(selectedUser), 1);
-            firebase.database().ref('userlist/' + selectedUser).update({
-                'p_id': '',
-                'p_name':''
-            }, function (error) {
-                if (error) {
-                    // The write failed...
-                } else {
-                    // Data saved successfully!
-                }
-            });
-            firebase.database().ref('project/' + this.props.p_id).update({
-                'p_member_included': this.state.projectUser.p_member_included - 1,
-                'p_member_left': this.state.projectUser.p_member_left + 1,
-
-            }, function (error) {
-                if (error) {
-                    // The write failed...
-                } else {
-                    // Data saved successfully!
-                }
-            });
-
-
-        }
-        else {
-            if (this.state.projectUser.p_member_left > 0) {
-                selectedIds.push(selectedUser);
+            if(item.p_id===this.props.p_id) {
+                selectedIds.splice(selectedIds.indexOf(selectedUser), 1);
                 firebase.database().ref('userlist/' + selectedUser).update({
-                    'p_id': this.props.p_id,
-                    'p_name':this.props.p_name
-
-                }, function (error) {
-                    if (error) {
-                        console.log('error', error);
-                    } else {
-                        console.log('successful');
-                    }
-                });
-                firebase.database().ref('project/' + this.props.p_id).update({
-                    'u_id': selectedIds,
-                    'p_member_included': this.state.projectUser.p_member_included + 1,
-                    'p_member_left': this.state.projectUser.p_member_left - 1,
+                    'p_id': '',
+                    'p_name': ''
                 }, function (error) {
                     if (error) {
                         // The write failed...
@@ -106,6 +64,55 @@ class UserListing extends Component {
                         // Data saved successfully!
                     }
                 });
+                firebase.database().ref('project/' + this.props.p_id).update({
+                    'p_member_included': this.state.projectUser.p_member_included - 1,
+                    'p_member_left': this.state.projectUser.p_member_left + 1,
+
+                }, function (error) {
+                    if (error) {
+                        // The write failed...
+                    } else {
+                        // Data saved successfully!
+                    }
+                });
+
+            }
+            else
+            {
+                alert("Developer is not Free");
+            }
+        }
+        else {
+
+            if (this.state.projectUser.p_member_left > 0) {
+                if(item.p_id==="") {
+                    selectedIds.push(selectedUser);
+                    firebase.database().ref('userlist/' + selectedUser).update({
+                        'p_id': this.props.p_id,
+                        'p_name': this.props.p_name
+
+                    }, function (error) {
+                        if (error) {
+                            console.log('error', error);
+                        } else {
+                            console.log('successful');
+                        }
+                    });
+                    firebase.database().ref('project/' + this.props.p_id).update({
+                        'u_id': selectedIds,
+                        'p_member_included': this.state.projectUser.p_member_included + 1,
+                        'p_member_left': this.state.projectUser.p_member_left - 1,
+                    }, function (error) {
+                        if (error) {
+                            // The write failed...
+                        } else {
+                            // Data saved successfully!
+                        }
+                    });
+                }else
+                {
+                    alert('Developer is not Free');
+                }
             }
             else {
                 alert('Project is already full');
@@ -121,16 +128,10 @@ class UserListing extends Component {
             })
 
     }
-
-
-
-
-    render() {
+   render() {
         console.ignoredYellowBox = [
             'Setting a timer'
         ]
-        console.log('selectedUser',this.state.projectUser);
-        console.log('condition', this.state.projectUser.length);
         return (
             <View style={{flex:1,padding:10}}>
                 <View style={{flex:1,backgroundColor:'#fff',padding:5,position:'relative'}}>
@@ -140,8 +141,9 @@ class UserListing extends Component {
                         {this.state.userList!==''?<FlatList
                             data={this.state.userList}
                             keyExtractor={(item, index) => index.toString()}
+                            showsHorizontalScrollIndicator={false}
                             renderItem={({item}) =>
-                                <TouchableOpacity onPress={()=>this.selectedData(item.keydata)} style={{flex:1,marginTop:20,borderWidth:1,borderColor:'#6164c1',borderRadius:4,padding:4,backgroundColor:'#cecece'}}>
+                                <TouchableOpacity onPress={()=>this.selectedData(item.keydata,item)} style={{flex:1,marginTop:20,borderWidth:1,borderColor:'#6164c1',borderRadius:4,padding:4,backgroundColor:'#cecece'}}>
 
                                     <View style={{flex:0.5,justifyContent:'center',alignItems:'center',flexDirection:'row'}}>
                                         <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
@@ -171,7 +173,6 @@ class UserListing extends Component {
                             }
                         />:<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                             <Bars size={10} color="#FDAAFF" /></View>}
-
                     </View>
 
                 </View>

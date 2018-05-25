@@ -13,8 +13,10 @@ import {
     ToastAndroid,
     FlatList,
     Image,
-    YellowBox
+    YellowBox,
+    AsyncStorage
 } from 'react-native';
+import moment from 'moment';
 import {Bars} from 'react-native-loader'
 import {Actions} from 'react-native-router-flux'
 import firebase from '../../src/firebaseConfig'
@@ -53,12 +55,16 @@ class AdminProject extends Component {
         return (
             <View style={{flex:1,padding:10}}>
                 <View style={{flex:1,backgroundColor:'#fff',padding:5,position:'relative'}}>
-                    <TouchableOpacity onPress={()=>Actions.addproject()} style={{flex:1,justifyContent:'center',alignItems:'center',maxHeight:'8%',backgroundColor:'#6164c1',borderRadius:4}}>
+                    <TouchableOpacity style={{backgroundColor:'#6164c1',position:'absolute',right:'3%',top:'1%',padding:4,borderRadius:4}} onPress={()=>{AsyncStorage.clear();Actions.home()}}>
+                        <Text style={{color:'#fff'}}>Logout</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>Actions.addproject()} style={{flex:1,justifyContent:'center',alignItems:'center',maxHeight:'8%',backgroundColor:'#6164c1',borderRadius:4,marginTop:'10%'}}>
                         <Text style={{color:'#fff'}}>ADD PROJECT</Text>
                     </TouchableOpacity>
                     <View style={{flex:1}}>
                         {this.state.projectList!==''?<FlatList
                             data={this.state.projectList}
+                            showsHorizontalScrollIndicator={false}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({item}) =>
                                 <View style={{flex:1,marginTop:20,borderWidth:1,borderColor:'#6164c1',borderRadius:4,padding:4,backgroundColor:'#cecece'}}>
@@ -71,10 +77,10 @@ class AdminProject extends Component {
                                         </View>
                                     <View style={{flex:3,justifyContent:'flex-start',alignItems:'flex-start',paddingLeft:10}}>
                                         <View style={{flex:1,justifyContent:'center',alignItems:'center',flexDirection:'row'}}>
-                                           <Text> Start Date : {item.p_startDate}</Text>
+                                           <Text> Start Date : {moment(item.p_startDate).format("DD/MM/YYYY")}</Text>
                                         </View>
                                         <View style={{flex:1}}>
-                                            <Text> End Date : {item.p_endDate}</Text>
+                                            <Text> End Date : {moment(item.p_endDate).format("DD/MM/YYYY")}</Text>
                                         </View>
                                         <View style={{flex:1}}>
                                             <Text> Team Member Req : {item.p_total_member}</Text>

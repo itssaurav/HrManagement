@@ -30,16 +30,7 @@ class Home extends Component {
         }
 
     }
-    addUser()
-    {
-        let addData = {
-            'userId':3,
-            'name':'saurav',
-            'type':'user'
-         }
-        firebase.database().ref('users/' + addData.userId).set(addData);
 
-    }
     loginModal()
     {
       if(this.state.username==='' || this.state.password==='')
@@ -62,7 +53,7 @@ class Home extends Component {
           }
 
       }
-        AsyncStorage.setItem('user','2');
+        AsyncStorage.setItem('username',this.state.username);
     }
     render() {
       return (
