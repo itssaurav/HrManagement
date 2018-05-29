@@ -54,11 +54,11 @@ class AdminProject extends Component {
         // ]
         return (
             <View style={{flex:1,padding:10}}>
-                <View style={{flex:1,backgroundColor:'#fff',padding:5,position:'relative'}}>
+                <View style={{flex:1,backgroundColor:'#fff',padding:5,position:'relative',paddingTop:'11%'}}>
                     <TouchableOpacity style={{backgroundColor:'#6164c1',position:'absolute',right:'3%',top:'1%',padding:4,borderRadius:4}} onPress={()=>{AsyncStorage.clear();Actions.home()}}>
                         <Text style={{color:'#fff'}}>Logout</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>Actions.addproject()} style={{flex:1,justifyContent:'center',alignItems:'center',maxHeight:'8%',backgroundColor:'#6164c1',borderRadius:4,marginTop:'10%'}}>
+                    <TouchableOpacity onPress={()=>Actions.addproject()} style={{flex:1,justifyContent:'center',alignItems:'center',maxHeight:'8%',backgroundColor:'#6164c1',borderRadius:4}}>
                         <Text style={{color:'#fff'}}>ADD PROJECT</Text>
                     </TouchableOpacity>
                     <View style={{flex:1}}>

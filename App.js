@@ -18,6 +18,7 @@ import UserListing from './src/components/userListing'
 import UserLogin from './src/components/userlogin'
 import UserDashboard from './src/components/userdashboard'
 import userleave from './src/components/userleaveform'
+// import ProjectListing from './src/components/leavePanel'
 import LeavePanel from './src/components/leavePanel'
 import Splash from './src/components/splash'
 
@@ -27,11 +28,10 @@ export default class App extends Component<Props> {
             <Router>
                  <Scene key="root">
                      <Scene key="splash" initial component={Splash} hideNavBar/>
-                        <Scene key="home"  tabs={true} default="tab2" tabBarPosition="top" type={ActionConst.RESET}>
+                         <Scene key="home"  tabs={true} default="tab2" tabBarPosition="top" type={ActionConst.RESET}>
                           <Scene key="userlogin" component={UserLogin} tabBarStyle={{flex:1,justifyContent:'center',alignItems:'center'}} title="User" hideNavBar/>
                           <Scene key="Loginadmin" component={Home} tabBarStyle={{flex:1,justifyContent:'center',alignItems:'center'}} title="Admin" hideNavBar/>
-                        </Scene>
-
+                         </Scene>
                         <Scene key="userDashboard" component={UserDashboard} title="User Dashboard"/>
                         <Scene key="userleaveform" component={userleave} title="Apply leave"/>
                          <Scene key="adminHome" tabs={true} default="tab1" tabBarPosition="top" type={ActionConst.RESET}>
@@ -40,8 +40,9 @@ export default class App extends Component<Props> {
                          </Scene>
                         <Scene key="leavePanel" component={LeavePanel}/>
                         <Scene key="addproject" component={AddProject} title="Add Project"/>
-                        <Scene key="userListing" component={UserListing} modal title="User Listing"/>
+                        <Scene key="userListing" component={UserListing} modal title="Employee Listing"/>
                         <Scene key="userSignup"  component={userSignup} title="usersignup"/>
+                        {/*<Scene key="projectListing" component={ProjectListing} modal title="Select the Project"/>*/}
                 </Scene>
            </Router>)}
        return (

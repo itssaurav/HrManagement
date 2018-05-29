@@ -10,14 +10,18 @@ import {
     TouchableOpacity,
     View,
     BackHandler,
-    ToastAndroid
+    ToastAndroid,
+    ScrollView
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import Entypo from 'react-native-vector-icons/Entypo'
 import { TextField } from 'react-native-material-textfield';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import firebase from '../../src/firebaseConfig'
 import {Actions} from 'react-native-router-flux'
 import DateTimePicker from 'react-native-modal-datetime-picker';
-
+import Modal from "react-native-modal";
+let resultArray = [];
 
 class AddProject extends Component {
     constructor(props) {
@@ -30,10 +34,27 @@ class AddProject extends Component {
             isDateTimePickerVisible: false,
             isDateTimePickerVisible1: false,
             startdate:'',
-            enddate:''
+            enddate:'',
+            modal:false,
+            selected:'',
+            selectedName:'',
+            projectList:[],
 
         }
-
+    }
+    componentDidMount()
+    {
+        firebase.database().ref('userlist').on('value',(projectData)=>{
+            Object.keys(projectData.val()).filter(function(key) {
+                console.log(projectData.val()[key]);
+             if(projectData.val()[key].Designation==='Manager')
+             {
+                 resultArray.push(projectData.val()[key]);
+             }
+            });
+            console.log('result',resultArray);
+            this.setState({projectList:resultArray});
+       });
     }
     _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
 
@@ -56,6 +77,12 @@ class AddProject extends Component {
         });
         this._hideDateTimePicker1();
     };
+    _showDateTimePickerModal()
+    {
+       this.setState({
+            modal:true
+        })
+    }
     addProject()
     {
         let data = firebase.database().ref().child('project').push();
@@ -76,6 +103,10 @@ class AddProject extends Component {
         });
 
         Actions.pop();
+
+    }
+    _showDateTimePicker2()
+    {
 
     }
     render() {
@@ -104,6 +135,12 @@ class AddProject extends Component {
                         value={this.state.enddate.toString().substring(4,15)}
                         onFocus={this._showDateTimePicker1.bind(this)}
                     />
+
+                    <TextField
+                        label='Select Manager'
+                        value={this.state.selectedName}
+                        onFocus={this._showDateTimePickerModal.bind(this)}
+                    />
                    <TouchableOpacity onPress={this.addProject.bind(this)} style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:'blue',maxHeight:50,marginTop:30}}>
                         <Text style={{color:'#fff'}}>ADD</Text>
                     </TouchableOpacity>
@@ -119,7 +156,31 @@ class AddProject extends Component {
                     onConfirm={this._handleDatePicked1}
                     onCancel={this._hideDateTimePicker1}
                    />
+                <Modal isVisible={this.state.modal}>
+                    <ScrollView contentContainerStyle={{padding:10}}>
+                        <View style={{backgroundColor:'#fff',borderRadius:4}}>
+                        <View style={{justifyContent:'center',alignItems:'flex-end',maxHeight:30}}>
+                            <TouchableOpacity onPress={()=>this.setState({modal:false})}><Entypo name="cross" size={20}/></TouchableOpacity>
+                        </View>
+                        {this.state.projectList.map((item,index)=>{
+                            return(
+                                <TouchableOpacity key={index} onPress={()=>this.setState({selected:item.keydata,selectedName:item.username,modal:false})} style={{flex: 1, flexDirection: 'row', borderBottomWidth: 1}}>
+                                    <View style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'flex-start',
+                                        padding: 10
+                                    }}>
+                                        {this.state.selected!==item.keydata?<Ionicons name="md-radio-button-off" size={15} color="orange"/>:<Ionicons name="md-radio-button-on" size={15} color="orange"/>}
+                                    </View>
+                                    <View style={{ justifyContent: 'center', alignItems: 'flex-start'}}>
+                                        <Text>{item.username}</Text>
+                                    </View>
+                                </TouchableOpacity>)})
+                        }
+                        </View>
+                    </ScrollView>
 
+                </Modal>
           </View>
         );
     }
