@@ -42,6 +42,9 @@ class UserLogin extends Component {
     }
     loginModal()
     {
+        if(this.state.username == "" && this.state.password ==""){
+            
+        }
         console.log("called")
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
         .then((response)=>{
@@ -82,7 +85,8 @@ class UserLogin extends Component {
     render() {
       return (
               <View style={{flex:1,padding:10}}>
-                  {this.state.validationText?<Text style={{color:'red',marginBottom:10}}>{this.state.validationText}</Text>:null}
+                  {/* {this.state.validationText?<Text style={{color:'red',marginBottom:10}}>{this.state.validationText}</Text>:null}
+                 */}
                   <View style={{flex:1,backgroundColor:'#fff',padding:20}}>
                      <TextField
                           label='UserName'
