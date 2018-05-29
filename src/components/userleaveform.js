@@ -62,14 +62,22 @@ class userleave extends Component {
     leaveapply(){
         console.log(this.props.keyiddata)
         console.log('calleddatata')
-        firebase.database().ref().child('userlist').child(this.props.keyiddata).child('leave').push().set({
-            subject: this.state.subject,
-            message: this.state.message,
-            fromdate: this.state.fromdate,
-            fromdateto: this.state.fromdateto,
-            status: 'pending'
-            // todate: 
-          });
+        if(this.state.fromdateto> this.state.fromdate){
+            let dataid = firebase.database().ref().child('userlist').child(this.props.keyiddata).child('leave').push();
+            dataid.set({
+                subject: this.state.subject,
+                message: this.state.message,
+                fromdate: this.state.fromdate,
+                fromdateto: this.state.fromdateto,
+                status: 'Pending',
+                keyvalue : dataid.key
+                // todate: 
+              });
+              Actions.leavelist({useridlist: this.props.keyiddata})
+        }
+        else{
+            alert("To date should be greater the from dated")
+        }
     }
     render() {
         console.log(this.state.subject)
