@@ -13,7 +13,8 @@ import {
     ScrollView,
     StyleSheet,
     CameraRoll,
-    Image
+    Image,
+    Platform
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import Modal from "react-native-modal";
@@ -34,12 +35,8 @@ let designation = [{
         id:1,
         post:'Manager'
     }];
-let useriddata
 var options = {
     title: 'Select Avatar',
-    customButtons: [
-      {name: 'fb', title: 'Choose Photo from Facebook'},
-    ],
     storageOptions: {
       skipBackup: true,
       path: 'images'
@@ -71,11 +68,13 @@ class userSignup extends Component {
     componentDidMount()
     {
         firebase.database().ref('project').on('value',(projectData)=>{
-            resultArray=Object.keys(projectData.val()).map(function(key) {
-                return projectData.val()[key]
-            });
-            console.log('result',resultArray);
-            this.setState({projectList:resultArray});
+            if(projectData.val()!==null){
+                resultArray=Object.keys(projectData.val()).map(function(key) {
+                    return projectData.val()[key]
+                });
+                console.log('result',resultArray);
+                this.setState({projectList:resultArray});
+            }
         });
     }
     rendefunction(dataids){
@@ -114,8 +113,9 @@ class userSignup extends Component {
     getimage(){
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response);
-            console.log("uridata", response.origURL)
-            const image = response.origURL
+            // console.log("uridata", Platform.OS === 'ios' ? response.origURL: response.uri)
+            let image = Platform.OS === 'ios' ? response.origURL : response.uri
+            // const image= response.origURL
             const Blob = RNFetchBlob.polyfill.Blob
             const fs = RNFetchBlob.fs
             window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest

@@ -17,7 +17,7 @@ import {
 import {Bars} from 'react-native-loader'
 import {Actions} from 'react-native-router-flux'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import firebase from '../../src/firebaseConfig'
+import firebase from '../firebaseConfig'
 let selectedIds = [];
 let selectedUI  = [];
 class UserListing extends Component {

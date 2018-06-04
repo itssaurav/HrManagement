@@ -12,7 +12,8 @@ import {
     BackHandler,
     ToastAndroid,
     FlatList,
-    Image
+    Image,
+    ART
 } from 'react-native';
 
 import {Bars} from 'react-native-loader'
@@ -45,6 +46,7 @@ class AdminUsers extends Component {
    }
 
     render() {
+        console.log("datareduced",this.state.listeduser)
       return (
             <View style={{flex:1,padding:10}}>
               <TouchableOpacity 
@@ -64,8 +66,8 @@ class AdminUsers extends Component {
 
                         <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:4,marginBottom:10,padding:5,elevation:1}}>
                            <View style={{flexDirection:'row',flex:1}}>
-                                <View style={{flex:1}}>
-                                    <Image source={require('../assets/project.jpg')} style={{width:70,height:70}}/>
+                                <View style={{height: 70, width: 70, borderRadius: 50,overflow: 'hidden', marginRight: 10}}>
+                                    <Image source={{uri: item.urlprofile}} style={{flexShrink: 1, flex: 1, width: null}}/>
                                 </View>
                                 <View style={{flex:2}}>
                                    <Text>Name : {item.username}</Text>
